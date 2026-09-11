@@ -2,8 +2,11 @@ package com.springboot.sandbox.user.external.dto.request;
 
 import java.time.LocalDate;
 
+import com.springboot.sandbox.common.enumeration.AccountRole;
 import com.springboot.sandbox.common.validator.annotation.IndonesianPhoneNumber;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,8 +20,9 @@ public class UserCreateDto {
     @NotBlank 
     private String password;
     
-    @NotBlank 
-    private String role;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AccountRole role;
     
     @NotBlank 
     private String fullName;

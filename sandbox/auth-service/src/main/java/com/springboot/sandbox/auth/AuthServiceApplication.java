@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 
 import com.springboot.sandbox.common.config.GlobalExceptionHandler;
+import com.springboot.sandbox.common.config.OpenApiConfig;
 
 @SpringBootApplication(
 	scanBasePackages = {
@@ -20,7 +22,8 @@ import com.springboot.sandbox.common.config.GlobalExceptionHandler;
 	}
 )
 @EnableDiscoveryClient 
-@Import(GlobalExceptionHandler.class)
+@EnableFeignClients 
+@Import({GlobalExceptionHandler.class, OpenApiConfig.class})
 public class AuthServiceApplication {
 
 	public static void main(String[] args) {

@@ -38,16 +38,6 @@ public class UserController {
         return ApiResponse.success(userService.updateUser(userUpdateDto), "User updated");
     }
 
-    @GetMapping("/{username}")
-    public ApiResponse<UserDto> findUserByUsername(@PathVariable String username) {
-        return ApiResponse.success(userService.findUserByUsername(username), "User found");
-    }
-
-    @DeleteMapping("/{username}")
-    public ApiResponse<Boolean> removeUser(@PathVariable String username) {
-        return ApiResponse.success(userService.deleteUser(username), "User deleted");
-    }
-
     @GetMapping()
     public PageResponse<UserDto> findUserByPaging(
         @RequestParam(defaultValue = "0") int page,
@@ -57,6 +47,14 @@ public class UserController {
     ) {
         return userService.findUsersWithPaging(page, pageSize, sortBy, sortDirection);
     }
-    
 
+    @GetMapping("/{username}")
+    public ApiResponse<UserDto> findUserByUsername(@PathVariable String username) {
+        return ApiResponse.success(userService.findUserByUsername(username), "User found");
+    }
+
+    @DeleteMapping("/{username}")
+    public ApiResponse<Boolean> removeUser(@PathVariable String username) {
+        return ApiResponse.success(userService.deleteUser(username), "User deleted");
+    }
 }

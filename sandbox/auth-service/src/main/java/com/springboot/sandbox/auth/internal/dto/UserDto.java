@@ -1,9 +1,7 @@
-package com.springboot.sandbox.user.external.dto.response;
+package com.springboot.sandbox.auth.internal.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import com.springboot.sandbox.common.enumeration.AccountRole;
 
 import lombok.Data;
 
@@ -18,5 +16,4 @@ public class UserDto {
     private String phoneNumber;
     private String address;
     private String status;
-    private AccountRole role;
 }

@@ -13,8 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean 
-    public PasswordEncoder passwordEncoder(){
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -23,12 +23,11 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**", "/v1/api-docs/**", "/swagger-ui/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
-                )
+                        .requestMatchers("/api/auth/**", "/v1/api-docs/**", "/swagger-ui/**", "/error")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .build();
-                
+
     }
 }

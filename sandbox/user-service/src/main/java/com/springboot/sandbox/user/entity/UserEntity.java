@@ -6,6 +6,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.springboot.sandbox.common.entity.BaseEntity;
+import com.springboot.sandbox.common.enumeration.AccountRole;
 import com.springboot.sandbox.common.enumeration.AccountStatus;
 
 import jakarta.persistence.Column;
@@ -37,7 +38,8 @@ public class UserEntity extends BaseEntity {
     private String password;
 
     @Column(name = "role", nullable = false, length = 50)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private AccountRole role;
 
     @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
