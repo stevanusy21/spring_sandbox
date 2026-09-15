@@ -1,14 +1,59 @@
 {
+    "version": "0.2.0",
     "configurations": [
+        
+
         {
             "type": "java",
-            "name": "Spring Boot-UserServiceApplication<user-service>",
+            "name": "Discovery",
             "request": "launch",
-            "cwd": "${workspaceFolder}",
+            "mainClass": "com.springboot.sandbox.discovery.DiscoveryServiceApplication",
+            "projectName": "discovery-service",
+            "console": "internalConsole"
+        },
+        {
+            "type": "java",
+            "name": "Gateway",
+            "request": "launch",
+            "mainClass": "com.springboot.sandbox.gateway.GatewayServiceApplication",
+            "projectName": "gateway-service",
+            "console": "internalConsole"
+        },
+        {
+            "type": "java",
+            "name": "Auth",
+            "request": "launch",
+            "mainClass": "com.springboot.sandbox.auth.AuthServiceApplication",
+            "projectName": "auth-service",
+            "console": "internalConsole"
+        },
+        {
+            "type": "java",
+            "name": "User",
+            "request": "launch",
             "mainClass": "com.springboot.sandbox.user.UserServiceApplication",
             "projectName": "user-service",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "console": "internalConsole"
+        },
+        {
+            "type": "java",
+            "name": "Notification",
+            "request": "launch",
+            "mainClass": "com.springboot.sandbox.notification.NotificationServiceApplication",
+            "projectName": "notification-service",
+            "console": "internalConsole"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Run All Services",
+            "configurations": [
+                "Discovery",
+                "Gateway",
+                "Auth",
+                "User",
+                "Notification"
+            ]
         }
     ]
 }
