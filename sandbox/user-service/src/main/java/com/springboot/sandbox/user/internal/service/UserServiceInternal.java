@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.springboot.sandbox.common.exception.NotFoundException;
 import com.springboot.sandbox.user.entity.UserEntity;
 import com.springboot.sandbox.user.internal.dto.response.UserAuthDto;
+import com.springboot.sandbox.user.internal.dto.response.UserDetailDto;
 import com.springboot.sandbox.user.repository.UserRepository; 
 import com.springboot.sandbox.user.util.UserMapper; 
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,11 @@ public class UserServiceInternal {
         UserEntity userEntity = userRepository.findByUsername(username) 
                 .orElseThrow(() -> new NotFoundException("User '%s' not found!".formatted(username)));
         return mapper.toUserAuthDto(userEntity);
+    }
+
+    public UserDetailDto findUserDetailById(Long id) {
+        UserEntity userEntity = userRepository.findById(id) 
+                .orElseThrow(() -> new NotFoundException("User '%s' not found!".formatted(id)));
+        return mapper.toUserDetailDto(userEntity);
     }
 }

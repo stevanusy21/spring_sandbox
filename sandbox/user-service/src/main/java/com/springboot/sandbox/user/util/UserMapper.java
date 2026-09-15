@@ -7,6 +7,7 @@ import org.mapstruct.ReportingPolicy;
 import com.springboot.sandbox.user.external.dto.request.UserCreateDto;
 import com.springboot.sandbox.user.external.dto.response.UserDto;
 import com.springboot.sandbox.user.internal.dto.response.UserAuthDto;
+import com.springboot.sandbox.user.internal.dto.response.UserDetailDto;
 import com.springboot.sandbox.user.entity.UserEntity;
 
 @Mapper(
@@ -19,4 +20,5 @@ public interface UserMapper {
     UserAuthDto toUserAuthDto(UserEntity userEntity);
     UserEntity toUserEntity(UserDto userDto);
     UserEntity toUserEntity(UserCreateDto userRequestDto);
+    UserDetailDto toUserDetailDto(UserEntity userEntity);
 }

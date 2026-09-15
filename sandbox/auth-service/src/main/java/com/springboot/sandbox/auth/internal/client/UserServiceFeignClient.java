@@ -15,7 +15,7 @@ import jakarta.validation.Valid;
 
 @FeignClient(name = "user-service")
 public interface UserServiceFeignClient {
-    @GetMapping("/api/internal/users/{username}")
+    @GetMapping("/api/internal/users/user-auth/{username}")
     ApiResponse<UserAuthDto> findUserForAuth(@PathVariable String username);
 
     @PostMapping("/api/users")

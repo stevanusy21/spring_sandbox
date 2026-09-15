@@ -24,10 +24,10 @@ public class EmailLogs extends BaseEntity {
     private String to;
     @Column(name = "email_subject")
     private String subject;
-    @Column(name = "email_body")
+    @Column(name = "email_body", columnDefinition = "TEXT")
     private String body;
     @Column(name = "email_status")
     private String status;
-    @Column(name = "error_message")
+    @Column(name = "error_message", columnDefinition = "TEXT")
     private String errorMessage;
 }
