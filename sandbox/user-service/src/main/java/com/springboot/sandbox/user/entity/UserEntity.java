@@ -2,7 +2,6 @@ package com.springboot.sandbox.user.entity;
 
 import java.time.LocalDate;
 
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.springboot.sandbox.common.entity.BaseEntity;
@@ -24,8 +23,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "users")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@SQLDelete(sql = "UPDATE users SET deleted_date = NOW(), deleted_by = 'SYSTEM', status = 'DELETED' WHERE id = ?")
-@SQLRestriction("status <> 'DELETED' AND deleted_date IS NULL")
+@SQLRestriction("deleted_date IS NULL")
 public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

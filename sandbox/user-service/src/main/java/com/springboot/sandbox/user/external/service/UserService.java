@@ -11,6 +11,7 @@ import com.springboot.sandbox.common.enumeration.AccountStatus;
 import com.springboot.sandbox.common.exception.BadRequestException;
 import com.springboot.sandbox.common.exception.InternalServerException;
 import com.springboot.sandbox.common.exception.NotFoundException;
+import com.springboot.sandbox.common.util.AuditorUtil;
 import com.springboot.sandbox.common.util.Formatter;
 import com.springboot.sandbox.user.external.dto.request.UserCreateDto;
 import com.springboot.sandbox.user.external.dto.request.UserUpdateDto;
@@ -114,7 +115,10 @@ public class UserService {
         UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("User '%s' not found!".formatted(username)));
         try {
-            userRepository.delete(userEntity);
+            String currentUser = AuditorUtil.getCurrentUser();
+            userEntity.markDeleted(currentUser);
+            userEntity.setStatus(AccountStatus.DELETED);
+            userRepository.save(userEntity);
             return true;
         } catch (Exception e) {
             log.error("Failed to delete user", e);
