@@ -1,4 +1,4 @@
-package com.springboot.sandbox.notification.internal.dto.request;
+package com.springboot.sandbox.auth.internal.dto;
 
 import com.springboot.sandbox.common.enumeration.EmailTemplate;
 
@@ -12,7 +12,7 @@ public class EmailRequestDto {
     @NotNull
     private Long userId;
 
-    @NotNull 
+    @NotNull
     @Enumerated(value = EnumType.STRING)
     private EmailTemplate template;
 }

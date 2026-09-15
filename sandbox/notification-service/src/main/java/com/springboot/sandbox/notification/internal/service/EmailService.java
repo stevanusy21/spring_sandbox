@@ -38,9 +38,8 @@ public class EmailService {
 
         try {
             switch (request.getTemplate()) {
-                case "WELCOME":
-                    emailLogs.setSubject(
-                            request.getSubject() != null ? request.getSubject() : "Welcome to this Application");
+                case WELCOME:
+                    emailLogs.setSubject("Welcome to this Application");
                     emailLogs.setBody(buildWelcomeEmail(user));
                     break;
                 default:

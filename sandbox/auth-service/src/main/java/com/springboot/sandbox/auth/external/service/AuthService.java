@@ -3,6 +3,9 @@ package com.springboot.sandbox.auth.external.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +13,13 @@ import com.springboot.sandbox.auth.external.dto.request.LoginRequestDto;
 import com.springboot.sandbox.auth.external.dto.request.RegisterDto;
 import com.springboot.sandbox.auth.external.dto.response.LoginResponseDto;
 import com.springboot.sandbox.auth.internal.client.UserServiceFeignClient;
+import com.springboot.sandbox.auth.internal.dto.EmailRequestDto;
 import com.springboot.sandbox.auth.internal.dto.UserAuthDto;
 import com.springboot.sandbox.auth.internal.dto.UserCreateDto;
 import com.springboot.sandbox.auth.internal.dto.UserDto;
 import com.springboot.sandbox.common.dto.ApiResponse;
 import com.springboot.sandbox.common.enumeration.AccountRole;
+import com.springboot.sandbox.common.enumeration.EmailTemplate;
 import com.springboot.sandbox.common.exception.BadRequestException;
 import com.springboot.sandbox.common.util.JwtUtil;
 
@@ -28,6 +33,13 @@ public class AuthService {
     private final UserServiceFeignClient userServiceFeignClient;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final RabbitTemplate rabbitTemplate;
+
+    @Value("${rabbitmq.exchange.email}")
+    private String emailExchange;
+
+    @Value("${rabbitmq.routing-key.email}")
+    private String emailRoutingKey;
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         log.info("Attempting login for user: {}", loginRequestDto.getUsername());
@@ -76,12 +88,15 @@ public class AuthService {
         userCreateDto.setPhoneNumber(registerDto.getPhoneNumber());
         userCreateDto.setAddress(registerDto.getAddress());
         
-        try{
-
-        }catch(Exception e){
-            
-        }
         ApiResponse<UserDto> response = userServiceFeignClient.createUser(userCreateDto);
+        
+        if(response.getStatus() == HttpStatus.OK.value()){
+            EmailRequestDto emailRequestDto = new EmailRequestDto();
+            emailRequestDto.setUserId(response.getData().getId());
+            emailRequestDto.setTemplate(EmailTemplate.WELCOME);
+            rabbitTemplate.convertAndSend(emailExchange, emailRoutingKey, emailRequestDto);
+        }
+
         return response.getMessage();
     }
 }
