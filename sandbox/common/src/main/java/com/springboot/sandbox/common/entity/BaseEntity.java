@@ -38,4 +38,9 @@ public abstract class BaseEntity {
 
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
+
+    public void markDeleted(String currentUser){
+        this.deletedDate = LocalDateTime.now();
+        this.deletedBy = (currentUser != null && !currentUser.isBlank()) ? currentUser : "SYSTEM";
+    }
 }
