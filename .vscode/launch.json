@@ -42,6 +42,14 @@
             "mainClass": "com.springboot.sandbox.notification.NotificationServiceApplication",
             "projectName": "notification-service",
             "console": "internalConsole"
+        },
+        {
+            "type": "java",
+            "name": "File",
+            "request": "launch",
+            "mainClass": "com.springboot.sandbox.file.FileServiceApplication",
+            "projectName": "file-service",
+            "console": "internalConsole"
         }
     ],
     "compounds": [
@@ -52,7 +60,8 @@
                 "Gateway",
                 "Auth",
                 "User",
-                "Notification"
+                "Notification",
+                "File"
             ]
         }
     ]
