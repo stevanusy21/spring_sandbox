@@ -11,9 +11,8 @@ public class FileResponseDto {
     private String filePublicUrl;
     private String fileName;
     private FileCategory fileCategory;
-    private Long fileSize;
-    private String fileDescription;
     private String contentType;
+    private String fileDescription;
 
     public String getFilePublicUrl() {
         return fileCategory != null && fileCategory.isPublic()

@@ -1,5 +1,7 @@
 package com.springboot.sandbox.file.external.service;
 
+import com.springboot.sandbox.common.dto.PageResponse;
+import com.springboot.sandbox.common.enumeration.FileCategory;
 import com.springboot.sandbox.common.exception.NotFoundException;
 import com.springboot.sandbox.file.entity.Files;
 import com.springboot.sandbox.file.external.dto.request.FileConfirmDto;
@@ -13,6 +15,10 @@ import java.time.Duration;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -110,5 +116,11 @@ public class FileService {
             
             return presignedGet.url().toString();
         }
+    }
+
+    public PageResponse<FileResponseDto> findFilesWithPaging(Long userId, FileCategory fileCategory, int page, int pageSize, String sortBy, Direction sortDirection) {
+        Pageable pageable = PageRequest.of(page, pageSize, sortDirection, sortBy);
+        Page<Files> files = fileRepository.findAllByUserIdAndFileCategory(userId, fileCategory, pageable);
+        return PageResponse.from(files.map(filesMapper::toFileResponseDto));
     }
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data 
 public class FileConfirmDto {
+    private Long userId;
     @NotBlank 
     private String fileKey;
     @NotBlank
@@ -16,8 +17,6 @@ public class FileConfirmDto {
     private String fileName;
     @NotNull
     private FileCategory fileCategory;
-    @NotNull
-    private Long fileSize;
     @NotBlank
     private String contentType;
     private String fileDescription;

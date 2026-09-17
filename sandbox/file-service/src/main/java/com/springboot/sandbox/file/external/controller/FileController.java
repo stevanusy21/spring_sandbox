@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.sandbox.common.dto.ApiResponse;
+import com.springboot.sandbox.common.dto.PageResponse;
+import com.springboot.sandbox.common.enumeration.FileCategory;
 import com.springboot.sandbox.file.external.dto.request.FileConfirmDto;
 import com.springboot.sandbox.file.external.dto.request.PresignedUrlRequestDto;
 import com.springboot.sandbox.file.external.dto.response.FileResponseDto;
@@ -13,12 +15,15 @@ import com.springboot.sandbox.file.external.dto.response.PresignedUrlResponseDto
 import com.springboot.sandbox.file.external.service.FileService;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController 
+@RestController
 @RequestMapping("/api/files")
-@RequiredArgsConstructor 
+@RequiredArgsConstructor
 public class FileController {
     private final FileService fileService;
 
@@ -41,5 +46,15 @@ public class FileController {
     public ApiResponse<String> getDownloadUrl(@PathVariable Long id) {
         return ApiResponse.success(fileService.getDownloadUrl(id), "Download URL retrieved successfully");
     }
-    
+
+    @GetMapping()
+    public PageResponse<FileResponseDto> findFilesByPaging(
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) FileCategory fileCategory,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "createdDate") String sortBy,
+            @RequestParam(defaultValue = "DESC") Direction sortDirection) {
+        return fileService.findFilesWithPaging(userId, fileCategory, page, pageSize, sortBy, sortDirection);
+    }
 }
