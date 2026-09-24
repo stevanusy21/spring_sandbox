@@ -1,5 +1,6 @@
 package com.springboot.sandbox.file.external.dto.request;
 
+import com.springboot.sandbox.common.enumeration.EntityType;
 import com.springboot.sandbox.common.enumeration.FileCategory;
 
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +9,10 @@ import lombok.Data;
 
 @Data 
 public class FileConfirmDto {
-    private Long userId;
+    @NotNull 
+    private EntityType entityType;
+    @NotNull
+    private long entityId;
     @NotBlank 
     private String fileKey;
     @NotBlank

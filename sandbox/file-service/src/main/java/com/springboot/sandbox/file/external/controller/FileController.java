@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.sandbox.common.dto.ApiResponse;
 import com.springboot.sandbox.common.dto.PageResponse;
+import com.springboot.sandbox.common.enumeration.EntityType;
 import com.springboot.sandbox.common.enumeration.FileCategory;
 import com.springboot.sandbox.file.external.dto.request.FileConfirmDto;
 import com.springboot.sandbox.file.external.dto.request.PresignedUrlRequestDto;
@@ -49,12 +50,13 @@ public class FileController {
 
     @GetMapping()
     public PageResponse<FileResponseDto> findFilesByPaging(
-            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) EntityType entityType,
+            @RequestParam(required = false) Long entityId,
             @RequestParam(required = false) FileCategory fileCategory,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(defaultValue = "createdDate") String sortBy,
             @RequestParam(defaultValue = "DESC") Direction sortDirection) {
-        return fileService.findFilesWithPaging(userId, fileCategory, page, pageSize, sortBy, sortDirection);
+        return fileService.findFilesWithPaging(entityType, entityId, fileCategory, page, pageSize, sortBy, sortDirection);
     }
 }

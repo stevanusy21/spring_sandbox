@@ -1,7 +1,8 @@
 package com.springboot.sandbox.common.enumeration;
 
 public enum FileCategory {
-    AVATAR("Avatar", true),
+    IMAGE_PROFILE("Image_Profile", true),
+    IMAGE_PRODUCT("Image_Product", true),
     DOCUMENT("Document", false);
 
     private String bucketName;

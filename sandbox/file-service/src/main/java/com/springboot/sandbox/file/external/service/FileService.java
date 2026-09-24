@@ -1,15 +1,16 @@
 package com.springboot.sandbox.file.external.service;
 
 import com.springboot.sandbox.common.dto.PageResponse;
+import com.springboot.sandbox.common.enumeration.EntityType;
 import com.springboot.sandbox.common.enumeration.FileCategory;
 import com.springboot.sandbox.common.exception.NotFoundException;
-import com.springboot.sandbox.file.entity.Files;
+import com.springboot.sandbox.file.entity.FileEntity;
 import com.springboot.sandbox.file.external.dto.request.FileConfirmDto;
 import com.springboot.sandbox.file.external.dto.request.PresignedUrlRequestDto;
 import com.springboot.sandbox.file.external.dto.response.FileResponseDto;
 import com.springboot.sandbox.file.external.dto.response.PresignedUrlResponseDto;
-import com.springboot.sandbox.file.repository.FilesRepository;
-import com.springboot.sandbox.file.util.FilesMapper;
+import com.springboot.sandbox.file.repository.FileRepository;
+import com.springboot.sandbox.file.util.FileMapper;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -36,8 +37,8 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 @Slf4j
 public class FileService {
     private final S3Presigner s3Presigner;
-    private final FilesRepository fileRepository;
-    private final FilesMapper filesMapper;
+    private final FileRepository fileRepository;
+    private final FileMapper filesMapper;
     @Value("${supabase.s3.endpoint}")
     private String s3Endpoint;
 
@@ -81,21 +82,21 @@ public class FileService {
     public FileResponseDto confirmUpload(FileConfirmDto request) {
         log.info("Confirmed upload for fileKey: {}", request.getFileKey());
 
-        Files savedFile = fileRepository.save(filesMapper.toFiles(request));
+        FileEntity savedFile = fileRepository.save(filesMapper.toFileEntity(request));
         log.info("Saved file metadata to db with ID: {}", savedFile.getId());
 
         return filesMapper.toFileResponseDto(savedFile);
     }
 
     public FileResponseDto getFileDetail(Long id) {
-        Files file = fileRepository.findById(id)
+        FileEntity file = fileRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("File not found with ID: " + id));
         
         return filesMapper.toFileResponseDto(file);
     }
 
     public String getDownloadUrl(Long id) {
-        Files file = fileRepository.findById(id)
+        FileEntity file = fileRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("File not found with ID: " + id));
         
         if (file.getFileCategory().isPublic()) {
@@ -118,9 +119,11 @@ public class FileService {
         }
     }
 
-    public PageResponse<FileResponseDto> findFilesWithPaging(Long userId, FileCategory fileCategory, int page, int pageSize, String sortBy, Direction sortDirection) {
+    public PageResponse<FileResponseDto> findFilesWithPaging(EntityType entityType, Long entityId, FileCategory fileCategory, int page, int pageSize, String sortBy, Direction sortDirection) {
         Pageable pageable = PageRequest.of(page, pageSize, sortDirection, sortBy);
-        Page<Files> files = fileRepository.findAllByUserIdAndFileCategory(userId, fileCategory, pageable);
+        
+        Page<FileEntity> files = fileRepository.findAllByEntityTypeAndEntityIdAndFileCategory(entityType, entityId, fileCategory, pageable);
+         
         return PageResponse.from(files.map(filesMapper::toFileResponseDto));
     }
 }

@@ -11,12 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.springboot.sandbox.auth.external.dto.request.LoginRequestDto;
 import com.springboot.sandbox.auth.external.dto.request.RegisterDto;
+import com.springboot.sandbox.auth.external.dto.request.UserResetPasswordDto;
 import com.springboot.sandbox.auth.external.dto.response.LoginResponseDto;
 import com.springboot.sandbox.auth.internal.client.UserServiceFeignClient;
 import com.springboot.sandbox.auth.internal.dto.EmailRequestDto;
 import com.springboot.sandbox.auth.internal.dto.UserAuthDto;
 import com.springboot.sandbox.auth.internal.dto.UserCreateDto;
-import com.springboot.sandbox.auth.internal.dto.UserDto;
+import com.springboot.sandbox.auth.internal.dto.UserEmailDto;
 import com.springboot.sandbox.common.dto.ApiResponse;
 import com.springboot.sandbox.common.enumeration.AccountRole;
 import com.springboot.sandbox.common.enumeration.EmailTemplate;
@@ -88,12 +89,34 @@ public class AuthService {
         userCreateDto.setPhoneNumber(registerDto.getPhoneNumber());
         userCreateDto.setAddress(registerDto.getAddress());
         
-        ApiResponse<UserDto> response = userServiceFeignClient.createUser(userCreateDto);
+        ApiResponse<UserEmailDto> response = userServiceFeignClient.createUserInternal(userCreateDto);
         
         if(response.getStatus() == HttpStatus.OK.value()){
             EmailRequestDto emailRequestDto = new EmailRequestDto();
-            emailRequestDto.setUserId(response.getData().getId());
+            emailRequestDto.setEmail(response.getData().getEmail());
+            emailRequestDto.setFullName(response.getData().getFullName());
             emailRequestDto.setTemplate(EmailTemplate.WELCOME);
+            
+            rabbitTemplate.convertAndSend(emailExchange, emailRoutingKey, emailRequestDto);
+        }
+
+        return response.getMessage();
+    }
+
+    public String resetPassword(String username, UserResetPasswordDto request){
+        log.info("Attempting to reset password for user: {}", username);
+        
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        request.setPassword(encodedPassword);
+        
+        ApiResponse<UserEmailDto> response = userServiceFeignClient.resetPasswordInternal(username, request);
+        
+        if(response.getStatus() == HttpStatus.OK.value()){
+            EmailRequestDto emailRequestDto = new EmailRequestDto();
+            emailRequestDto.setEmail(response.getData().getEmail());
+            emailRequestDto.setFullName(response.getData().getFullName());
+            emailRequestDto.setTemplate(EmailTemplate.RESET_PASSWORD);
+            
             rabbitTemplate.convertAndSend(emailExchange, emailRoutingKey, emailRequestDto);
         }
 

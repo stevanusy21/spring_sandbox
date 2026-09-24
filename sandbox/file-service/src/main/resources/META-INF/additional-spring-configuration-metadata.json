@@ -14,8 +14,4 @@
   "name": "supabase.s3.secret-key",
   "type": "java.lang.String",
   "description": "A description for 'supabase.s3.secret-key'"
-}, {
-  "name": "supabase.s3.storage.buckets.avatar",
-  "type": "java.lang.String",
-  "description": "A description for 'supabase.s3.storage.buckets.avatar'"
 }]}

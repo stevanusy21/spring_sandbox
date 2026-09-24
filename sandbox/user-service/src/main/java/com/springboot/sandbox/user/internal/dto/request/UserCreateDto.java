@@ -1,4 +1,4 @@
-package com.springboot.sandbox.user.external.dto.request;
+package com.springboot.sandbox.user.internal.dto.request;
 
 import java.time.LocalDate;
 

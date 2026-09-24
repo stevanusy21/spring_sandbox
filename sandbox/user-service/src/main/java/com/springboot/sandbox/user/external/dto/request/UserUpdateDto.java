@@ -9,14 +9,10 @@ import com.springboot.sandbox.common.validator.annotation.IndonesianPhoneNumber;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data 
 public class UserUpdateDto {
-    @NotBlank 
-    private String username;
-    private String password;
     @Enumerated(EnumType.STRING)
     private AccountRole role;
     private String fullName;

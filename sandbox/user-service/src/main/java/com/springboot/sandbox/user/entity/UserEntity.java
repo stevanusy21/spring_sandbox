@@ -29,7 +29,7 @@ public class UserEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false, length = 50, unique = true)
+    @Column(name = "username", nullable = false, length = 50)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -45,10 +45,10 @@ public class UserEntity extends BaseEntity {
     @Column(name = "dob", nullable = false)
     private LocalDate dob;
 
-    @Column(name = "email", nullable = false, length = 50, unique = true)
+    @Column(name = "email", nullable = false, length = 50)
     private String email;
 
-    @Column(name = "phone_number", nullable = false, length = 20, unique = true)
+    @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
     @Column(name = "address", length = 255)

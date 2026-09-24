@@ -18,7 +18,7 @@ public class EmailConsumer {
 
     @RabbitListener(queues = RabbitMqConfig.QUEUE_NAME)
     public void consumeEmailMessage(EmailRequestDto emailRequestDto) {
-        log.info("Received email request for userId: {}", emailRequestDto.getUserId());
+        log.info("Received email request for {}", emailRequestDto.getEmail());
         emailService.sendEmail(emailRequestDto);
     }
 }

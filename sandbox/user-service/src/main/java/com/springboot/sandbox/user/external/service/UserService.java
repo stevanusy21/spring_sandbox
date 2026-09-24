@@ -13,7 +13,6 @@ import com.springboot.sandbox.common.exception.InternalServerException;
 import com.springboot.sandbox.common.exception.NotFoundException;
 import com.springboot.sandbox.common.util.AuditorUtil;
 import com.springboot.sandbox.common.util.Formatter;
-import com.springboot.sandbox.user.external.dto.request.UserCreateDto;
 import com.springboot.sandbox.user.external.dto.request.UserUpdateDto;
 import com.springboot.sandbox.user.external.dto.response.UserDto;
 import com.springboot.sandbox.user.entity.UserEntity;
@@ -44,69 +43,36 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto createUser(UserCreateDto userRequestDto) {
-        if (userRepository.existsByUsername(userRequestDto.getUsername())) {
-            throw new BadRequestException("User with username '%s' already exists!".formatted(userRequestDto.getUsername()));
-        }
-        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
-            throw new BadRequestException("User with email '%s' already exists!".formatted(userRequestDto.getEmail()));
-        }
-        if (userRepository.existsByPhoneNumber(userRequestDto.getPhoneNumber())) {
-            throw new BadRequestException("User with phone number '%s' already exists!".formatted(userRequestDto.getPhoneNumber()));
-        }
-
-        String normalizedPhoneNumber = Formatter.normalizePhoneNumber(userRequestDto.getPhoneNumber());
-        
-        try {
-            UserEntity userEntity = mapper.toUserEntity(userRequestDto);
-            userEntity.setPhoneNumber(normalizedPhoneNumber);
-            userEntity.setStatus(AccountStatus.ACTIVE);
-            return mapper.toUserDto(userRepository.save(userEntity));
-        } catch (Exception e) {
-            log.error("Failed to create user", e);
-            throw new InternalServerException("Failed to create user");
-        }
-    }
-
-    @Transactional
-    public UserDto updateUser(UserUpdateDto userUpdateDto) {
-        UserEntity userEntity = userRepository.findByUsername(userUpdateDto.getUsername())
+    public UserDto updateUser(String username, UserUpdateDto userUpdateDto) {
+        UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(
-                        () -> new NotFoundException("User '%s' not found!".formatted(userUpdateDto.getUsername())));
+                        () -> new NotFoundException("User '%s' not found!".formatted(username)));
 
-        if (userUpdateDto.getPassword() != null) {
-            userEntity.setPassword(userUpdateDto.getPassword());
-        }
-
-        if (userUpdateDto.getFullName() != null) {
-            userEntity.setFullName(userUpdateDto.getFullName());
-        }
-
-        if (userUpdateDto.getDob() != null) {
-            userEntity.setDob(userUpdateDto.getDob());
-        }
-        if (userUpdateDto.getEmail() != null && 
-            !userUpdateDto.getEmail().equalsIgnoreCase(userEntity.getEmail())) {
+        if (!userUpdateDto.getEmail().equalsIgnoreCase(userEntity.getEmail())) {
             if (userRepository.existsByEmailAndIdNot(userUpdateDto.getEmail(), userEntity.getId())) {
                 throw new BadRequestException("User with email '%s' already exists!".formatted(userUpdateDto.getEmail()));
             }
             userEntity.setEmail(userUpdateDto.getEmail());
+        } else {
+            userEntity.setEmail(userEntity.getEmail());
         }
-        if (userUpdateDto.getPhoneNumber() != null) {
-            String normalizedPhoneNumber = Formatter.normalizePhoneNumber(userUpdateDto.getPhoneNumber());
-            if(!normalizedPhoneNumber.equals(userEntity.getPhoneNumber())){
-                if(userRepository.existsByPhoneNumberAndIdNot(normalizedPhoneNumber, userEntity.getId())){
-                    throw new BadRequestException("User with phone number '%s' already exists!".formatted(normalizedPhoneNumber));
-                }
-                userEntity.setPhoneNumber(normalizedPhoneNumber);
+
+        String normalizedPhoneNumber = Formatter.normalizePhoneNumber(userUpdateDto.getPhoneNumber());
+        if(!normalizedPhoneNumber.equals(userEntity.getPhoneNumber())){
+            if(userRepository.existsByPhoneNumberAndIdNot(normalizedPhoneNumber, userEntity.getId())){
+                throw new BadRequestException("User with phone number '%s' already exists!".formatted(normalizedPhoneNumber));
             }
+            userEntity.setPhoneNumber(normalizedPhoneNumber);
+        } else {
+            userEntity.setPhoneNumber(userEntity.getPhoneNumber());
         }
-        if (userUpdateDto.getAddress() != null) {
-            userEntity.setAddress(userUpdateDto.getAddress());
-        }
-        if (userUpdateDto.getStatus() != null) {
-            userEntity.setStatus(userUpdateDto.getStatus());
-        }
+        
+        userEntity.setPassword(userEntity.getPassword());
+        userEntity.setFullName(userUpdateDto.getFullName());
+        userEntity.setDob(userUpdateDto.getDob());
+        userEntity.setAddress(userUpdateDto.getAddress());
+        userEntity.setStatus(userUpdateDto.getStatus());
+        
         return mapper.toUserDto(userRepository.save(userEntity));
     }
 

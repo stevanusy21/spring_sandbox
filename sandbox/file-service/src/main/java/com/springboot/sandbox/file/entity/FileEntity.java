@@ -1,6 +1,7 @@
 package com.springboot.sandbox.file.entity;
 
 import com.springboot.sandbox.common.entity.BaseEntity;
+import com.springboot.sandbox.common.enumeration.EntityType;
 import com.springboot.sandbox.common.enumeration.FileCategory;
 
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "files")
 @EqualsAndHashCode(callSuper = true)
 @SQLRestriction("deleted_date IS NULL")
-public class Files extends BaseEntity {
+public class FileEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,4 +41,11 @@ public class Files extends BaseEntity {
 
     @Column(name = "file_description", nullable = true)
     private String fileDescription;
+
+    @Column(name = "entity_type", nullable = false) 
+    @Enumerated(value = EnumType.STRING)
+    private EntityType entityType;
+
+    @Column(name = "entity_id", nullable = false)
+    private Long entityId;
 }

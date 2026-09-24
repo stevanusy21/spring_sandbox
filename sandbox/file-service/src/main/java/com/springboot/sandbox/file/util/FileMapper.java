@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
-import com.springboot.sandbox.file.entity.Files;
+import com.springboot.sandbox.file.entity.FileEntity;
 import com.springboot.sandbox.file.external.dto.request.FileConfirmDto;
 import com.springboot.sandbox.file.external.dto.response.FileResponseDto;
 
@@ -14,7 +14,7 @@ import com.springboot.sandbox.file.external.dto.response.FileResponseDto;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 
 )
-public interface FilesMapper {
-    FileResponseDto toFileResponseDto(Files file);
-    Files toFiles(FileConfirmDto fileConfirmDto);
+public interface FileMapper {
+    FileResponseDto toFileResponseDto(FileEntity file);
+    FileEntity toFileEntity(FileConfirmDto fileConfirmDto);
 }
