@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{url}}/api/products?page&pageSize&orderBy&orderDirection"
+method: GET
+queryParams:
+  - key: page
+    value: null
+    disabled: false
+    description: ""
+  - key: pageSize
+    value: null
+    disabled: false
+    description: ""
+  - key: orderBy
+    value: null
+    disabled: false
+    description: ""
+  - key: orderDirection
+    value: null
+    disabled: false
+    description: ""
+order: 4100754962283711

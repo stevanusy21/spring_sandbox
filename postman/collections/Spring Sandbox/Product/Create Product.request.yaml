@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{url}}/api/products"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"Buku A\",\r
+
+    \    \"description\": \"Buku tentang keuangan dari penulis A\",\r
+
+    \    \"price\": \"50000\",\r
+
+    \    \"stock\": \"10\",\r
+
+    \    \"status\": \"AVAILABLE\"\r
+
+    }"
+order: 1790309882497

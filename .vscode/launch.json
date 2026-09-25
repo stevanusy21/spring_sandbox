@@ -1,8 +1,6 @@
 {
     "version": "0.2.0",
     "configurations": [
-        
-
         {
             "type": "java",
             "name": "Discovery",
@@ -50,6 +48,14 @@
             "mainClass": "com.springboot.sandbox.file.FileServiceApplication",
             "projectName": "file-service",
             "console": "internalConsole"
+        },
+        {
+            "type": "java",
+            "name": "Product",
+            "request": "launch",
+            "mainClass": "com.springboot.sandbox.product.ProductServiceApplication",
+            "projectName": "product-service",
+            "console": "internalConsole"
         }
     ],
     "compounds": [
@@ -61,7 +67,8 @@
                 "Auth",
                 "User",
                 "Notification",
-                "File"
+                "File",
+                "Product"
             ]
         }
     ]
