@@ -20,8 +20,12 @@ public class FileEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = true)
-    private Long userId;
+    @Column(name = "entity_type", nullable = false) 
+    @Enumerated(value = EnumType.STRING)
+    private EntityType entityType;
+
+    @Column(name = "entity_id", nullable = false)
+    private Long entityId;
     
     @Column(name = "file_key", nullable = false)
     private String fileKey;
@@ -41,11 +45,4 @@ public class FileEntity extends BaseEntity {
 
     @Column(name = "file_description", nullable = true)
     private String fileDescription;
-
-    @Column(name = "entity_type", nullable = false) 
-    @Enumerated(value = EnumType.STRING)
-    private EntityType entityType;
-
-    @Column(name = "entity_id", nullable = false)
-    private Long entityId;
 }

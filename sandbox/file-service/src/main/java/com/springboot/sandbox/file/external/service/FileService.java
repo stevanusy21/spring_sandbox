@@ -44,31 +44,29 @@ public class FileService {
 
     public PresignedUrlResponseDto createPresignedUrl(PresignedUrlRequestDto request) {
         String bucketName = request.getFileCategory().getBucketName();
-        String fileKey = String.format("%s/%s-%s", 
-            request.getFileCategory().name().toLowerCase(),
-            UUID.randomUUID(),
-            request.getFileName()
-        );
+        String fileKey = String.format("%s/%s-%s",
+                request.getFileCategory().name().toLowerCase(),
+                UUID.randomUUID(),
+                request.getFileName());
 
         PutObjectRequest objectRequest = PutObjectRequest.builder()
-            .bucket(bucketName)
-            .key(fileKey)
-            .contentType(request.getContentType())
-            .build();
+                .bucket(bucketName)
+                .key(fileKey)
+                .contentType(request.getContentType())
+                .build();
 
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
-            .signatureDuration(Duration.ofMinutes(10))
-            .putObjectRequest(objectRequest)
-            .build();
+                .signatureDuration(Duration.ofMinutes(10))
+                .putObjectRequest(objectRequest)
+                .build();
 
         PresignedPutObjectRequest presignedPut = s3Presigner.presignPutObject(presignRequest);
 
         String uploadUrl = presignedPut.url().toString();
-        String publicUrl = String.format("%s/object/public/%s/%s", 
-            s3Endpoint.replace("/s3", ""),
-            bucketName,
-            fileKey
-        );
+        String publicUrl = String.format("%s/object/public/%s/%s",
+                s3Endpoint.replace("/s3", ""),
+                bucketName,
+                fileKey);
 
         PresignedUrlResponseDto response = new PresignedUrlResponseDto();
         response.setUploadUrl(uploadUrl);
@@ -82,7 +80,9 @@ public class FileService {
     public FileResponseDto confirmUpload(FileConfirmDto request) {
         log.info("Confirmed upload for fileKey: {}", request.getFileKey());
 
-        FileEntity savedFile = fileRepository.save(filesMapper.toFileEntity(request));
+        FileEntity file = filesMapper.toFileEntity(request);
+        FileEntity savedFile = fileRepository.save(file);
+
         log.info("Saved file metadata to db with ID: {}", savedFile.getId());
 
         return filesMapper.toFileResponseDto(savedFile);
@@ -90,40 +90,42 @@ public class FileService {
 
     public FileResponseDto getFileDetail(Long id) {
         FileEntity file = fileRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("File not found with ID: " + id));
-        
+                .orElseThrow(() -> new NotFoundException("File not found with ID: " + id));
+
         return filesMapper.toFileResponseDto(file);
     }
 
     public String getDownloadUrl(Long id) {
         FileEntity file = fileRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("File not found with ID: " + id));
-        
+                .orElseThrow(() -> new NotFoundException("File not found with ID: " + id));
+
         if (file.getFileCategory().isPublic()) {
             return file.getFilePublicUrl();
         } else {
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(file.getFileCategory().getBucketName())
-                .key(file.getFileKey())
-                .responseContentDisposition("attachment;filename=\"" + file.getFileName() + "\"")
-                .build();
+                    .bucket(file.getFileCategory().getBucketName())
+                    .key(file.getFileKey())
+                    .responseContentDisposition("attachment;filename=\"" + file.getFileName() + "\"")
+                    .build();
 
             GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(15))
-                .getObjectRequest(getObjectRequest)
-                .build();
+                    .signatureDuration(Duration.ofMinutes(15))
+                    .getObjectRequest(getObjectRequest)
+                    .build();
 
             PresignedGetObjectRequest presignedGet = s3Presigner.presignGetObject(presignRequest);
-            
+
             return presignedGet.url().toString();
         }
     }
 
-    public PageResponse<FileResponseDto> findFilesWithPaging(EntityType entityType, Long entityId, FileCategory fileCategory, int page, int pageSize, String sortBy, Direction sortDirection) {
+    public PageResponse<FileResponseDto> findFilesWithPaging(EntityType entityType, Long entityId,
+            FileCategory fileCategory, int page, int pageSize, String sortBy, Direction sortDirection) {
         Pageable pageable = PageRequest.of(page, pageSize, sortDirection, sortBy);
-        
-        Page<FileEntity> files = fileRepository.findAllByEntityTypeAndEntityIdAndFileCategory(entityType, entityId, fileCategory, pageable);
-         
+
+        Page<FileEntity> files = fileRepository.findAllByEntityTypeAndEntityIdAndFileCategory(entityType, entityId,
+                fileCategory, pageable);
+
         return PageResponse.from(files.map(filesMapper::toFileResponseDto));
     }
 }
