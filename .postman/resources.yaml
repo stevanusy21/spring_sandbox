@@ -1,6 +1,10 @@
 # Use this workspace to collaborate
 workspace:
-  id: 013a1a36-8a95-4af6-a3ee-0f66e263329f
+  id: 665ab520-12fe-4587-8075-49eb56bb95e7
+
+cloudResources:
+  collections:
+    ../postman/collections/Spring Sandbox: 50ea1c37-b722-45cb-83d4-11dc654096e8
 
 # All resources in the `postman/` folder are automatically registered in Local View.
 # Point to additional files outside the `postman/` folder to register them individually. Example:

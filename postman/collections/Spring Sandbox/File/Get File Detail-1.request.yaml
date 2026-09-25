@@ -1,0 +1,5 @@
+$kind: http-request
+name: Get File Detail
+url: "{{url}}/api/files/6"
+method: GET
+order: 4480974702807755

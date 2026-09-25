@@ -1,0 +1,34 @@
+$kind: http-request
+name: Confirm Uploaded File
+url: "{{url}}/api/files/confirm"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"entityType\": \"USER\",\r
+
+    \  \"entityId\": 7,\r
+
+    \  \"fileKey\": \"{{fileKey}}\",\r
+
+    \  \"filePublicUrl\": \"{{publicUrl}}\",\r
+
+    \  \"fileName\": \"{{fileName}}\",\r
+
+    \  \"fileCategory\": \"{{fileCategory}}\",\r
+
+    \  \"contentType\": \"{{contentType}}\",\r
+
+    \  \"fileDescription\": \"Foto Profile Admin2\"\r
+
+    }"
+scripts:
+  - type: beforeRequest
+    code: "const request = JSON.parse(pm.request.body.raw);\r
+
+      \r
+
+      console.log(request);"
+    language: text/javascript
+order: 4477853198868254

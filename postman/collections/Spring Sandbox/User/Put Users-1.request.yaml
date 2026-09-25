@@ -1,0 +1,24 @@
+$kind: http-request
+name: Put Users
+url: "{{url}}/api/users/admin"
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"role\": \"USER\",\r
+
+    \  \"fullName\": \"Admin One\",\r
+
+    \  \"dob\": \"2000-11-30\",\r
+
+    \  \"email\": \"admin@admin.com\",\r
+
+    \  \"phoneNumber\": \"+6282233445555\",\r
+
+    \  \"address\": \"Jakarta Pusat\",\r
+
+    \  \"status\": \"ACTIVE\"\r
+
+    }"
+order: 4164743376929143

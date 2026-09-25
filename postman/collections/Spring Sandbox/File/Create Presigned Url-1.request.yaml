@@ -1,0 +1,59 @@
+$kind: http-request
+name: Create Presigned Url
+url: "{{url}}/api/files/presigned-url"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"fileCategory\": \"IMAGE_PROFILE\",\r
+
+    \  \"fileName\": \"death.png\",\r
+
+    \  \"contentType\": \"image/png\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "const data = pm.response.json();\r
+
+      \r
+
+      if (data) {\r
+
+      \    const request = JSON.parse(pm.request.body.raw);\r
+
+      \r
+
+      \    pm.collectionVariables.set(\"fileCategory\", request.fileCategory);\r
+
+      \    pm.collectionVariables.set(\"fileName\", request.fileName);\r
+
+      \    pm.collectionVariables.set(\"contentType\", request.contentType);\r
+
+      \r
+
+      \    if (data.data.fileKey) {\r
+
+      \        pm.collectionVariables.set(\"fileKey\", data.data.fileKey);\r
+
+      \    }\r
+
+      \    if (data.data.publicUrl) {\r
+
+      \        pm.collectionVariables.set(\"publicUrl\", data.data.publicUrl);\r
+
+      \    }\r
+
+      \    if (data.data.uploadUrl) {\r
+
+      \        pm.collectionVariables.set(\"uploadUrl\", data.data.uploadUrl);\r
+
+      \    }\r
+
+      }\r\n"
+    language: text/javascript
+  - type: beforeRequest
+    code: ""
+    language: text/javascript
+order: 3533237717566732

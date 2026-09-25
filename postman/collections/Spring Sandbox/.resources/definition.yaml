@@ -1,0 +1,31 @@
+$kind: collection
+description: ""
+variables:
+  - key: url
+    value: ""
+    disabled: false
+  - key: token
+    secret: true
+    disabled: false
+  - key: fileKey
+    value: ""
+    disabled: false
+  - key: publicUrl
+    value: ""
+    disabled: false
+  - key: uploadUrl
+    value: ""
+    disabled: false
+  - key: fileCategory
+    value: ""
+    disabled: false
+  - key: fileName
+    value: ""
+    disabled: false
+  - key: contentType
+    value: ""
+    disabled: false
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"

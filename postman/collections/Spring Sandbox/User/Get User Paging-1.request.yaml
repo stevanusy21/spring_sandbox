@@ -1,0 +1,22 @@
+$kind: http-request
+name: Get User Paging
+url: "{{url}}/api/users?page=&pageSize=&sortBy=&sortDirection="
+method: GET
+queryParams:
+  - key: page
+    value: ""
+    disabled: false
+    description: ""
+  - key: pageSize
+    value: ""
+    disabled: false
+    description: ""
+  - key: sortBy
+    value: ""
+    disabled: false
+    description: ""
+  - key: sortDirection
+    value: ""
+    disabled: false
+    description: ""
+order: 4437

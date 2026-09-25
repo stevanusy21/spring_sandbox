@@ -1,0 +1,9 @@
+$kind: http-request
+name: Upload File to S3
+url: "{{uploadUrl}}"
+method: PUT
+body:
+  type: file
+  content:
+    src: /C:/Users/1706/Downloads/death.png
+order: 4174964269763506

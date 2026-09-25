@@ -1,0 +1,5 @@
+$kind: http-request
+name: Download File
+url: "{{url}}/api/files/6/download"
+method: GET
+order: 4499945171476317

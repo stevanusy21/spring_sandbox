@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{url}}/api/auth/login"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "username": "admin",
+      "password": "admin"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      const data = pm.response.json();
+
+      if (data && data.data.token) {
+        pm.collectionVariables.set("token", data.data.token);
+      }
+    language: text/javascript
+order: 1000

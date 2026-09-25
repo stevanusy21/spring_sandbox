@@ -1,0 +1,34 @@
+$kind: http-request
+name: Get File Paging
+url: "{{url}}/api/files?entityType=USER&entityId=5&fileCategory=IMAGE_PROFILE&page=&pageSize=&sortBy=&sortDirection="
+method: GET
+queryParams:
+  - key: entityType
+    value: USER
+    disabled: false
+    description: ""
+  - key: entityId
+    value: "5"
+    disabled: false
+    description: ""
+  - key: fileCategory
+    value: IMAGE_PROFILE
+    disabled: false
+    description: ""
+  - key: page
+    value: ""
+    disabled: false
+    description: ""
+  - key: pageSize
+    value: ""
+    disabled: false
+    description: ""
+  - key: sortBy
+    value: ""
+    disabled: false
+    description: ""
+  - key: sortDirection
+    value: ""
+    disabled: false
+    description: ""
+order: 4498435715929676
